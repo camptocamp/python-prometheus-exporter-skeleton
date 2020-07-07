@@ -1,0 +1,29 @@
+---
+version: '3'
+services:
+
+  exporter:
+    build: ./
+    image: camptocamp/prometheus-exporter-skeleton:latest
+
+  # Observability
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus:/prometheus
+    ports:
+      - "9090:9090"
+  grafana:
+    image: grafana/grafana:6.7.3
+    volumes:
+      - grafana:/var/lib/grafana
+      - ./docker/grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./docker/grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+      - ./docker/grafana/dashboard.json:/var/lib/grafana/dashboards/dashboard.json
+    ports:
+      - "3000:3000"
+
+volumes:
+    prometheus:
+    grafana:
