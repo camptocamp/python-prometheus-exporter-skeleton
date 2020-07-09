@@ -2,6 +2,15 @@
 
 A skeleton to build a prometheus exporter with [python library](https://github.com/prometheus/client_python).
 
+Summary :
+
+* Prometheus ecosystem overview
+* How to use python lib
+* Test with docker-compose
+* Bulid static binary and docker image
+* Deploy
+* Alerting
+
 ## Prometheus overview
 
 * [Overview](https://prometheus.io/docs/introduction/overview/#architecture)
@@ -14,7 +23,7 @@ A skeleton to build a prometheus exporter with [python library](https://github.c
 * Libraries available for [several languages](https://prometheus.io/docs/instrumenting/clientlibs/)
 * Exporter can be include in existing app or run a seperate app
 * 4 ways to implements metrics:
-  * `set()`, `inc()` method on metric object.
+  * `set()`, `inc()` and `dec()` method on metric object.
     [Example](https://github.com/camptocamp/python-prometheus-exporter-skeleton/blob/master/exporter/exporter.py#L30)
   * Using callback.
     [Example](https://github.com/camptocamp/python-prometheus-exporter-skeleton/blob/master/exporter/exporter.py#L15)
@@ -28,8 +37,8 @@ A skeleton to build a prometheus exporter with [python library](https://github.c
 Before deploying the exporter you need to test it. You can use a
 docker composition to test exporter on workstation. You need:
 
-  * promeheus
-  * grafana
+  * Promeheus
+  * Grafana
   * DB, ldap, minio, webserver or others componenents
 
 Prometheus configuration is done with a [simple config
@@ -40,6 +49,20 @@ For grafana, you need to [setup datasource](https://github.com/camptocamp/python
  and [dashboard discovery](https://github.com/camptocamp/python-prometheus-exporter-skeleton/blob/master/docker/grafana/dashboards.yaml).
 Then you can mount [JSON dashboard](https://github.com/camptocamp/python-prometheus-exporter-skeleton/blob/master/docker/grafana/dashboard.json) at
 `/var/lib/grafana/dashboards/`.
+
+## Build static binary and docker image
+
+Use [pyinstaller](https://www.pyinstaller.org/) to build a single file
+executable with python interpreter and dependencies.
+This binary still depends on glic. Glic have backward compatibility so we build
+with the oldest glibc to use: Centos 7.
+
+This is done with a [multi-step build](https://docs.docker.com/develop/develop-images/multistage-build/) of the [docker image](https://github.com/camptocamp/python-prometheus-exporter-skeleton/blob/master/Dockerfile).
+
+In the second step, we can choose the base image based on exporter requirements:
+postgres, debian, ...
+
+Finally, the binary can be extracted from the final image and [publish as a release](https://github.com/camptocamp/wal-g-prometheus-exporter/releases).
 
 ## Discovery of the new exporter
 
