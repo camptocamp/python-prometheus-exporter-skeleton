@@ -6,7 +6,7 @@ services:
     build: ./
     image: camptocamp/prometheus-exporter-skeleton:latest
     ports:
-      - "9153:9153"
+      - "9351:9351"
 
   # Observability
   prometheus:
