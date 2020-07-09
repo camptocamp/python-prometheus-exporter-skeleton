@@ -35,11 +35,14 @@ Summary :
 ## Test
 
 Before deploying the exporter you need to test it. You can use a
-docker composition to test exporter on workstation. You need:
+[docker composition](https://github.com/camptocamp/python-prometheus-exporter-skeleton/blob/master/docker-compose.yml)
+to test exporter on workstation. This compostiion deploy:
 
-  * Promeheus
-  * Grafana
-  * DB, ldap, minio, webserver or others componenents
+  * [Exporter](http://localhost:9351/metrics)
+  * [Promeheus](http://localhost:9090/)
+  * [Grafana](http://localhost:3000)
+
+You might need some additional services like a DB, ldap, minio, webserver or others componenents.
 
 Prometheus configuration is done with a [simple config
 file](https://github.com/camptocamp/python-prometheus-exporter-skeleton/blob/master/docker/prometheus.yml).
@@ -60,7 +63,8 @@ with the oldest glibc to use: Centos 7.
 This is done with a [multi-step build](https://docs.docker.com/develop/develop-images/multistage-build/) of the [docker image](https://github.com/camptocamp/python-prometheus-exporter-skeleton/blob/master/Dockerfile).
 
 In the second step, we can choose the base image based on exporter requirements:
-postgres, debian, ...
+postgres, debian, ... This exporter use
+[sensors](https://github.com/camptocamp/python-prometheus-exporter-skeleton/blob/master/exporter/exporter.py#L26) so we need to [install it](https://github.com/camptocamp/python-prometheus-exporter-skeleton/blob/master/Dockerfile#L35) in the final image.
 
 Finally, the binary can be extracted from the final image and [publish as a release](https://github.com/camptocamp/wal-g-prometheus-exporter/releases).
 
