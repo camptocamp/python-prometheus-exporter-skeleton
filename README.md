@@ -36,7 +36,7 @@ Summary :
 
 Before deploying the exporter you need to test it. You can use a
 [docker composition](https://github.com/camptocamp/python-prometheus-exporter-skeleton/blob/master/docker-compose.yml)
-to test exporter on workstation. This compostiion deploy:
+to test exporter on workstation. This composition deploy:
 
   * [Exporter](http://localhost:9351/metrics)
   * [Promeheus](http://localhost:9090/)
